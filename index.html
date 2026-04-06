@@ -663,6 +663,29 @@ body{
 
 
 
+
+/* Tambahkan CSS untuk toast */
+.toast {
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  background-color: #56a958; /* hijau sukses */
+  color: white;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 9999;
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
 </style>
 </head>
 <body>
@@ -879,6 +902,17 @@ body{
     </div>
   </div>
 
+
+
+  <!-- Tambahkan ini di HTML body -->
+<div id="toast" class="toast"></div>
+
+
+
+
+
+
+
 </div>
 
 <!-- ====================== SCRIPT ====================== -->
@@ -1003,19 +1037,24 @@ document.getElementById("jatuhTempoPinjaman").innerText =
 // Update Kode VA di popup
 // Update Kode VA dari Firebase
 const vaContainer = document.getElementById("popupKodeVA");
-if(userData.kodeVA){
-    vaContainer.textContent = userData.kodeVA;
-} else {
-    vaContainer.textContent = "-";
+if(vaContainer){
+    vaContainer.textContent = userData.kodeVA || "-";
 }
 
 // Tombol copy
-document.getElementById("copyVA").addEventListener("click", ()=>{
-    if(userData.kodeVA){
-        navigator.clipboard.writeText(userData.kodeVA);
-        alert("Kode VA berhasil disalin!");
-    }
+// Ganti bagian copyVA
+document.getElementById("copyVA").addEventListener("click", () => {
+  if(userData.kodeVA){
+    navigator.clipboard.writeText(userData.kodeVA)
+      .then(() => {
+        showToast("berhasil disalin "); // pakai toast custom
+      })
+      .catch(() => {
+        showToast("Gagal menyalin Kode VA ", "#f44336"); // toast merah jika error
+      });
+  }
 });
+
   }catch(err){
     console.error(err);
     msgEl.textContent="Terjadi kesalahan, coba lagi";
@@ -1274,10 +1313,28 @@ function showPage(page){
   document.getElementById(page+"Page").style.display="block";
 }
 
-function copyOrder(){
+// Fungsi untuk menampilkan toast
+function showToast(msg, color = "#4caf50") {
+  const toast = document.getElementById("toast");
+  toast.innerText = msg;
+  toast.style.backgroundColor = color; // bisa hijau, merah, biru, dll
+  toast.classList.add("show");
+
+  setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2500); // durasi tampil 2,5 detik
+}
+
+// Fungsi copy dengan toast
+function copyOrder() {
   const text = document.getElementById("orderId").innerText;
-  navigator.clipboard.writeText(text);
-  alert("Order ID berhasil disalin");
+  navigator.clipboard.writeText(text)
+    .then(() => {
+      showToast("Order ID berhasil disalin"); // toast custom
+    })
+    .catch(() => {
+      showToast("Gagal menyalin Order ID", "#f44336"); // toast merah jika error
+    });
 }
 
 
