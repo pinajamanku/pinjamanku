@@ -10,35 +10,116 @@
 body{
   font-family:Arial, sans-serif;
   margin:0;
-  background:#f4f6f9;
+  background:#d2f3ff47;
   padding-bottom:80px;
   color:#333;
 }
 
-/* HEADER */
-.header{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  background:#c40000;
-  color:white;
-  padding:15px;
-  display:flex;
-  align-items:center;
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background: #b10808;
+  position: relative;
+  border-radius: 10px;
+  color: #ffff;
+  font-weight: bold;
+}
+
+.header .logo {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  border-radius: 10px;
+}
+
+.header-right {
+  position: relative;
+}
+
+.logo-menu {
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 10px;
+  transition: 0.3s;
+    filter: brightness(0) invert(1); /* ubah warna ikon jadi putih */
+
+}
+.logo-menu:hover {
+  transform: scale(1.1);
+}
+
+/* Dropdown */
+.dropdown-menu {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: white;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  border-radius: 12px;
+  width: 300px;
+  display: none;
+  padding: 15px;
+  z-index: 999;
+}
+
+.menu-item {
+  padding: 10px 8px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+  color: #333;
+  transition: 0.2s;
+}
+.menu-item:last-child { border-bottom: none; }
+
+.menu-item:hover {
+  background: #f0f0f0;
+  border-radius: 8px;
+}
+
+/* Artikel + Foto */
+.article-photos {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+.article-photos img {
+  width: 30%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+/* Modal */
+.modal-content {
+  display: none;
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.6);
   justify-content:center;
-  gap:10px;
-  font-weight:bold;
-  z-index:9999;
-  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  align-items:center;
+  z-index: 1000;
 }
 
-.logo{
-  width:32px;
-  height:32px;
-  border-radius:6px;
+.modal-inner {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90%;
+  position: relative;
 }
 
+.modal-inner .close {
+  position: absolute;
+  top:10px;
+  right:15px;
+  font-size: 24px;
+  cursor: pointer;
+}
 /* PAGE */
 .page{
   animation:fade .2s ease;
@@ -517,6 +598,28 @@ body{
 }
 
 
+
+.modal-inner {
+  background: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  width: 500px;
+  max-width: 90%;
+  position: relative;
+
+  max-height: 80vh;     /* 🔥 batas tinggi */
+  overflow-y: auto;     /* 🔥 aktifkan scroll */
+}
+
+/* Scroll lebih halus */
+.modal-inner::-webkit-scrollbar {
+  width: 6px;
+}
+.modal-inner::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
 </style>
 </head>
 <body>
@@ -525,6 +628,23 @@ body{
 <div class="header">
   <img src="Rupiah segar.jpg" class="logo">
   <span>Rupiah Segar</span>
+
+  <!-- Logo kanan dengan dropdown -->
+  <div class="header-right">
+    <img src="country_filter_icon.png" class="logo-menu" onclick="toggleMenu()">
+    <div id="dropdownMenu" class="dropdown-menu">
+      <div class="menu-item" onclick="showKontak()">Kontak</div>
+      <div class="menu-item" onclick="showKetentuan()">Ketentuan & Privasi</div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal untuk menampilkan konten profesional -->
+<div id="modalContent" class="modal-content">
+  <div class="modal-inner">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <div id="modalBody"></div>
+  </div>
 </div>
 
 <!-- LOGIN CARD -->
@@ -881,7 +1001,156 @@ function updateUserDashboard(){
 </script>
 
 <script>
-  
+  // Toggle dropdown menu
+function toggleMenu(){
+  const menu = document.getElementById("dropdownMenu");
+  menu.style.display = menu.style.display === "block" ? "none" : "block";
+}
+
+// Fungsi menampilkan modal profesional
+function showKontak(){
+  showModal(`
+    <div style="font-family:'Segoe UI',sans-serif; color:#333;">
+
+      <h2 style="color:#e90e0e; margin-bottom:5px;">Kontak Kami</h2>
+      <p style="font-size:14px; color:#666; margin-bottom:15px;">
+        Kami siap membantu Anda 24 jam untuk semua kebutuhan layanan Rupiah Segar.
+      </p>
+
+      <!-- BOX KONTAK -->
+      <div style="
+        background:#f8fafc;
+        border-radius:12px;
+        padding:15px;
+        margin-bottom:15px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      ">
+        <b>Email Support</b><br>
+        <span style="color:#7f5c5c;">support@rupiahsegar.com</span>
+      </div>
+
+      <div style="
+        background:#f8fafc;
+        border-radius:12px;
+        padding:15px;
+        margin-bottom:15px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      ">
+        <b>WhatsApp</b><br>
+        <span style="color:#7f5c5c;">08xxxxxxxxxx</span>
+
+      </div>
+
+      <div style="
+        background:#f8fafc;
+        border-radius:12px;
+        padding:15px;
+        margin-bottom:15px;
+        box-shadow:0 4px 12px rgba(0,0,0,0.08);
+      ">
+        <b>Jam Operasional</b><br>
+        <span style="color:#7f5c5c;">24 Jam (Setiap Hari)</span>
+      <!-- INFO TAMBAHAN -->
+      <div style="
+        margin-top:20px;
+        padding:15px;
+        background:#e0f2fe;
+        border-radius:10px;
+        font-size:13px;
+        color:#0369a1;
+      ">
+        Menggunakan Layanan, Anda telah menyetujui dan akan terikat oleh syarat-syarat Kebijakan Privasi ini.
+      </div>
+
+    </div>
+  `);
+}
+
+function showKetentuan(){
+  showModal(`
+    <div style="font-family:'Segoe UI',sans-serif; line-height:1.6; color:#333;">
+      
+      <h2 style="margin-bottom:10px; color:#e90e0e;">Ketentuan & Kebijakan Privasi</h2>
+      <p style="font-size:14px; color:#666;">Terakhir diperbarui: ${new Date().toLocaleDateString("id-ID")}</p>
+
+      <hr style="margin:15px 0;">
+
+      <h3 style="color:#111;">Pendahuluan</h3>
+      <p>
+        Dalam rangka meningkatkan kualitas layanan, <b>Rupiah Segar</b> berkomitmen untuk melindungi 
+        dan menjaga kerahasiaan data pribadi pengguna. Kebijakan ini menjelaskan bagaimana kami 
+        mengumpulkan, menggunakan, dan melindungi informasi Anda saat menggunakan layanan kami.
+      </p>
+
+      <h3 style="color:#111;">Pengumpulan Data</h3>
+      <p>Kami dapat mengumpulkan beberapa informasi berikut:</p>
+      <ul style="padding-left:18px;">
+        <li>Data identitas (nama, nomor HP, dll)</li>
+        <li>Data transaksi dan aktivitas pengguna</li>
+        <li>Informasi perangkat dan akses sistem</li>
+      </ul>
+
+      <h3 style="color:#111;">Penggunaan Data</h3>
+      <p>Data yang dikumpulkan digunakan untuk:</p>
+      <ul style="padding-left:18px;">
+        <li>Memproses layanan dan transaksi</li>
+        <li>Meningkatkan kualitas sistem dan keamanan</li>
+        <li>Memberikan informasi terkait layanan</li>
+      </ul>
+
+      <h3 style="color:#111;">Keamanan Data</h3>
+      <p>
+        Rupiah Segar menggunakan sistem keamanan berlapis untuk menjaga data pengguna agar tetap aman 
+        dari akses yang tidak sah, perubahan, atau penyalahgunaan.
+      </p>
+
+      <h3 style="color:#111;">Pihak Ketiga</h3>
+      <p>
+        Dalam beberapa kondisi, kami dapat bekerja sama dengan pihak ketiga untuk mendukung layanan. 
+        Namun, kami memastikan bahwa setiap pihak tetap menjaga kerahasiaan data pengguna.
+      </p>
+
+      <h3 style="color:#111;">Hak Pengguna</h3>
+      <p>Pengguna memiliki hak untuk:</p>
+      <ul style="padding-left:18px;">
+        <li>Mengakses dan memperbarui data pribadi</li>
+        <li>Meminta penghapusan data</li>
+        <li>Menghentikan penggunaan layanan</li>
+      </ul>
+
+      <h3 style="color:#111;">Penutup</h3>
+      <p>
+        Dengan menggunakan layanan Rupiah Segar, Anda dianggap telah membaca dan menyetujui seluruh 
+        ketentuan yang berlaku dalam kebijakan ini.
+      </p>
+
+      <div style="margin-top:20px; padding:15px; background:#f1f5f9; border-radius:10px;">
+        <b>Kontak Kami:</b><br>
+        Email: support@rupiahsegar.com<br>
+        WhatsApp: 08xxxxxxxxxx
+      </div>
+
+    </div>
+  `);
+}
+
+function showModal(htmlContent){
+  document.getElementById("modalBody").innerHTML = htmlContent;
+  document.getElementById("modalContent").style.display = "flex";
+}
+
+function closeModal(){
+  document.getElementById("modalContent").style.display = "none";
+}
+
+// Klik di luar dropdown menutup menu
+window.addEventListener("click", function(e){
+  const menu = document.getElementById("dropdownMenu");
+  const logo = document.querySelector(".logo-menu");
+  if(!menu.contains(e.target) && e.target !== logo){
+    menu.style.display = "none";
+  }
+});
 // tombol login
 
 function openBayar(){ document.getElementById("bayarPopup").style.display="flex"; }
