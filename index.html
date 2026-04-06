@@ -20,80 +20,104 @@ body{
 
 .header {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; /* kiri di kiri, kanan di kanan */
   align-items: center;
   padding: 10px 20px;
   background: #b10808;
   position: relative;
   border-radius: 10px;
-  color: #ffff;
+  color: #fff;
   font-weight: bold;
 }
 
-.header .logo {
+/* Kiri: logo + teks */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* jarak logo dan teks */
+}
+
+.header-left .logo {
   width: 30px;
   height: 30px;
   object-fit: contain;
   border-radius: 10px;
 }
 
+.header-left .logo-text {
+  font-size: 16px;
+  color: #fff;
+}
+
+/* Kanan: logo menu */
 .header-right {
   position: relative;
 }
 
-
-
-::selection {
-  background: transparent;
-}
-
-::-moz-selection {
-  background: transparent;
-}
-
-
-
-
-.logo-menu {
+.header-right .logo-menu {
   width: 30px;
   height: 30px;
   cursor: pointer;
-  border-radius: 10px;
-  transition: 0.3s;
-    filter: brightness(0) invert(1); /* ubah warna ikon jadi putih */
-
-}
-.logo-menu:hover {
-  transform: scale(1.1);
+  filter: brightness(0) invert(1); /* hitam → putih */
 }
 
-/* Dropdown */
+/* Dropdown menu */
 .dropdown-menu {
-  position: absolute;
-  top: 60px;
-  right: 0;
-  background: white;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-  border-radius: 12px;
-  width: 300px;
   display: none;
-  padding: 15px;
-  z-index: 999;
+  position: absolute;
+  right: 0;
+  top: 100%;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  overflow: hidden;
+  z-index: 10;
 }
+
+/* Dropdown full layar separuh atas */
+#dropdownMenu {
+  position: fixed;       /* supaya bisa full layar */
+  top: 55px;                /* mulai dari atas */
+  right: 0;              /* menempel ke kanan */
+  width: 50vw;          /* full lebar layar */
+  height: 50vh;          /* separuh tinggi layar */
+  background: #b10808; /* hitam semi-transparan */
+  color: #ffffff;
+  display: none;         /* default hidden */
+  flex-direction: column;
+  padding: 20px;
+  z-index: 999;         /* pastikan di atas semua elemen */
+  overflow-y: auto;      /* scroll kalau isi banyak */
+  border-bottom-left-radius: 10px; /* opsional: rounded */
+  border-bottom-right-radius: 10px;
+}
+
+/* setiap menu item */
+#dropdownMenu .menu-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.2);
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 10px;
+  background: #b10808;
+}
+
+#dropdownMenu .menu-item:last-child {
+  border-bottom: none;
+}
+
+
+
 
 .menu-item {
-  padding: 10px 8px;
+  padding: 10px 20px;
   cursor: pointer;
-  border-bottom: 1px solid #eee;
-  font-size: 14px;
-  color: #333;
-  transition: 0.2s;
 }
-.menu-item:last-child { border-bottom: none; }
 
 .menu-item:hover {
-  background: #f0f0f0;
-  border-radius: 8px;
+  background-color: #a0a0a0;
 }
 
 /* Artikel + Foto */
@@ -645,10 +669,13 @@ body{
 
 <!-- HEADER -->
 <div class="header">
-  <img src="Rupiah segar.jpg" class="logo">
-  <span>Rupiah Segar</span>
+  <!-- Kiri: logo + teks -->
+  <div class="header-left">
+    <img src="Rupiah segar.jpg" class="logo">
+    <span class="logo-text">Rupiah Segar</span>
+  </div>
 
-  <!-- Logo kanan dengan dropdown -->
+  <!-- Kanan: logo menu dengan dropdown -->
   <div class="header-right">
     <img src="country_filter_icon.png" class="logo-menu" onclick="toggleMenu()">
     <div id="dropdownMenu" class="dropdown-menu">
