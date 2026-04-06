@@ -523,15 +523,15 @@ body{
 
 <!-- HEADER -->
 <div class="header">
-  <img src="logo demo pinjaman.webp" class="logo">
-  <span>Pinjamanku</span>
+  <img src="Rupiah segar.jpg" class="logo">
+  <span>Rupiah Segar</span>
 </div>
 
 <!-- LOGIN CARD -->
 <div id="loginCard">
   <!-- Logo di atas -->
   <div class="logo-top">
-    <img src="logo demo pinjaman.webp" alt="Logo" class="logo-img">
+    <img src="Rupiah segar.jpg" alt="Logo" class="logo-img">
   </div>
 
   <!-- Judul Login -->
@@ -572,7 +572,7 @@ body{
     <div class="row">
       <span class="label">Pemberi Pinjaman</span>
       <span class="value">
-        <img src="logo demo pinjaman.webp" class="value-icon">
+        <img src="Rupiah segar.jpg" class="value-icon">
         Pinjaman Online
       </span>
     </div>
@@ -766,7 +766,7 @@ window.loginUser = async function(){
   const msgEl = document.getElementById("loginMessage");
   msgEl.textContent = "";
 
-  if(!noWa){ msgEl.textContent="Masukan nomor dahulu!"; return; }
+  if(!noWa){ msgEl.textContent="Mohon masukan nomor!"; return; }
 
   try{
     const q = query(collection(db, "users"), where("noWa","==",noWa));
