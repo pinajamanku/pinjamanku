@@ -626,13 +626,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // Realtime Database
-import { 
-  getDatabase, 
-  ref as rtdbRef,   // alias supaya tidak bingung dengan Firestore ref
-  get as getRtdb, 
-  set, 
-  onValue 
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
 // Storage
 import { 
@@ -1061,22 +1055,21 @@ window.saveContact = function(){
   const wa = document.getElementById("waInput").value;
   const jam = document.getElementById("jamInput").value;
 
-set(dbRef(realtimeDB, "setting/contact"), {
-  email, 
-  wa, 
-  jam
-});
+  set(ref(realtimeDB, "setting/contact"), {
+    email, 
+    wa, 
+    jam
+  });
 
   alert("Berhasil disimpan!");
 }
 
 
 async function loadContactUser(){
-
   console.log("🔥 FUNCTION KE PANGGIL");
 
   try{
-    const snap = await get(dbRef(realtimeDB, "setting/contact"));
+    const snap = await get(ref(realtimeDB, "setting/contact")); // <-- pakai ref
 
     console.log("🔥 SNAP:", snap);
 
