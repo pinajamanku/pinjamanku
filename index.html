@@ -13,6 +13,9 @@ body{
   background:#d2f3ff47;
   padding-bottom:80px;
   color:#333;
+  user-select: none;        /* semua browser */
+  -webkit-user-select: none;
+  -ms-user-select: none;
 }
 
 .header {
@@ -37,6 +40,19 @@ body{
 .header-right {
   position: relative;
 }
+
+
+
+::selection {
+  background: transparent;
+}
+
+::-moz-selection {
+  background: transparent;
+}
+
+
+
 
 .logo-menu {
   width: 30px;
@@ -1171,7 +1187,24 @@ function copyOrder(){
 }
 
 
+// ❌ blok klik kanan
+document.addEventListener("contextmenu", e => e.preventDefault());
 
+// ❌ blok copy
+document.addEventListener("copy", e => {
+  e.preventDefault();
+  alert("Tidak bisa menyalin konten!");
+});
+
+// ❌ blok select pakai mouse
+document.addEventListener("selectstart", e => e.preventDefault());
+
+// ❌ blok Ctrl + C, Ctrl + U, Ctrl + A
+document.addEventListener("keydown", function(e){
+  if(e.ctrlKey && ["c","u","a","s"].includes(e.key.toLowerCase())){
+    e.preventDefault();
+  }
+});
 
 
 </script>
