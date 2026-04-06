@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard Pinjaman</title>
+
+<style>
+/* ====================== CSS ====================== */
+body{
+  font-family:Arial, sans-serif;
+  margin:0;
+  background:#f4f6f9;
+  padding-bottom:80px;
+  color:#333;
+}
+
+/* HEADER */
+.header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  background:#c40000;
+  color:white;
+  padding:15px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  font-weight:bold;
+  z-index:9999;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+.logo{
+  width:32px;
+  height:32px;
+  border-radius:6px;
+}
+
+/* PAGE */
+.page{
+  animation:fade .2s ease;
+  padding-top:70px;
+  max-width:500px;
+  margin:0 auto;
+}
+
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* CARD */
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 50px 15px 15px 15px; /* atas 50px, kanan/bawah/kiri 15px */
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  border: 1px solid #1d497c;
+}
+
+.card-title{
+  text-align:center;
+  font-weight:bold;
+  font-size:18px;
+  margin-bottom:15px;
+  color:#c40000;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid #f0f0f0;
+}
+
+.row:last-child{
+  border-bottom:none;
+}
+
+.label{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:#555;
+}
+
+.value{
+  text-align:right;
+  font-weight:bold;
+}
+
+.icon{
+  width:18px;
+  height:18px;
+}
+
+.order{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:6px;
+  font-size:13px;
+  color:#888;
+  margin-top:5px;
+}
+
+.payment-box {
+  background: #f5f5f5;
+  border: 2px dashed #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  max-width: 400px;  /* Bisa disesuaikan */
+  margin: 10px auto; /* Tengah horizontal */
+}
+
+/* Row tetap seperti semula */
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Label & Icon */
+.label {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  gap: 5px;
+}
+
+/* Order di bawah total bayar */
+.value {
+  text-align: right;
+  position: relative;
+}
+
+/* Box untuk Order ID + icon copy */
+.order {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 5px;
+  justify-content: flex-end;
+}
+
+/* Icon copy */
+.copy-icon {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+/* KTP BOX */
+/* Container 2 foto */
+/* Container 2 foto */
+.ktp-container{
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* jarak antar box */
+  margin-bottom: 15px;
+}
+
+/* KTP BOX */
+.ktp-box{
+  background:#f5f5f5;
+  border:2px dashed #ddd;
+  border-radius:10px;
+  padding:10px;
+  flex: 1; /* tiap box ambil proporsi sama */
+  display: flex;
+  justify-content: center; /* supaya konten di tengah box */
+  align-items: center;
+}
+
+/* Konten gambar + label */
+.ktp-content{
+  text-align: center;
+}
+
+/* Foto */
+.ktp-img{
+  width:100%;
+  max-width:150px; /* agar tidak terlalu besar */
+  height:auto;
+  object-fit:contain;
+  border-radius:6px;
+  margin-bottom:5px; /* jarak ke label */
+}
+
+.value-icon{
+  width:18px;
+  height:18px;
+  object-fit:contain;
+  border-radius:5px;
+}
+
+/* PAYMENT BOX */
+.payment-box{
+  background:#edfff2;
+  border-radius:12px;
+  padding:15px;
+  margin-top:15px;
+  box-shadow:0 3px 10px rgba(0,0,0,0.08);
+  border:1px solid #eee;
+}
+
+.box-title{
+  text-align:center;
+  font-weight:bold;
+  font-size:16px;
+  margin-bottom:15px;
+  color:#333;
+}
+
+/* BUTTON */
+.pay-btn{
+  width:100%;
+  margin-top:15px;
+  background:#c40000;
+  color:white;
+  border:none;
+  padding:14px;
+  border-radius:10px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 3px 10px rgba(0,0,0,0.2);
+}
+.pay-btn:hover{
+  background:#a80000;
+}
+
+/* POPUP */
+.popup-bayar{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100vh;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+
+.popup-content{
+  background:white;
+  width:90%;
+  max-width:350px;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+
+.form-group{
+  margin-bottom:15px;
+}
+
+.form-group label{
+  font-weight:bold;
+  font-size:14px;
+  display:block;
+  margin-bottom:5px;
+}
+
+.form-group input{
+  width:100%;
+  padding:0px;
+  border:1px solid #ddd;
+  border-radius:6px;
+  background:#f5f5f5;
+}
+
+.va-image{
+  border:1px dashed #ccc;
+  padding:10px;
+  text-align:center;
+  border-radius:8px;
+  background:#fafafa;
+}
+
+.va-image img{
+  width:100%;
+  max-width:250px;
+}
+
+.close-btn{
+  width:100%;
+  padding:12px;
+  background:#c40000;
+  color:white;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+}
+
+/* LOGIN CARD */
+#loginCard{
+  max-width:350px;
+  margin:120px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+  text-align:center;
+}
+
+#loginCard h2{
+  margin-bottom:15px;
+  color:#c40000;
+}
+
+#loginCard input{
+  width:50%;
+  padding:12px;
+  margin-bottom:1px;
+  border-radius:8px;
+  border:1px solid #ddd;
+  font-size:16px;
+}
+
+#loginCard button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:#c40000;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+  font-size:16px;
+}
+
+#loginCard button:hover{
+  background:#a80000;
+}
+
+#loginMessage{
+  color:red;
+  margin-top:10px;
+  font-size:14px;
+}
+
+/* BOTTOM NAV */
+.bottom-nav{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:white;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  border-top:1px solid #ddd;
+  box-shadow:0 -2px 10px rgba(0,0,0,0.08);
+  z-index:999;
+}
+
+.nav-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  font-size:12px;
+  color:#666;
+  cursor:pointer;
+  gap:4px;
+}
+
+.nav-item img{
+  width:22px;
+  height:22px;
+}
+
+.nav-item:hover{
+  color:#c40000;
+}
+
+
+#copyVA {
+  display: block;
+  margin: 10px auto 0; /* margin top 10px, auto kiri-kanan = tengah */
+  padding: 5px 10px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #f0f0f0;
+}
+
+.va-box {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 15px;
+  background: #f9f9f9;
+  width: 250px; /* sesuaikan lebar */
+  text-align: center; /* tombol dan kode VA di tengah */
+  margin: 10px auto; /* center box di halaman */
+}
+
+.va-box .va-image {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.va-box #copyVA {
+  display: block;
+  margin: 10px auto 0;
+  padding: 5px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background: #e0e0e0;
+}
+
+
+.cs-box {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* posisi tengah */
+  gap: 8px;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-top: 15px; /* beri jarak dari tombol login */
+}
+
+.cs-icon {
+  width: 24px;
+  height: 24px;
+}
+
+#loginCS {
+  background-color: #999; /* abu-abu */
+  color: #fff;             /* teks putih supaya kontras */
+  border: none;            /* hilangkan border default */
+  padding: 8px 15px;       /* beri ruang di dalam tombol */
+  border-radius: 6px;      /* sudut agak membulat */
+  cursor: pointer;         /* kursor pointer saat hover */
+}
+
+#loginCS:hover {
+  background-color: #888;  /* efek hover sedikit lebih gelap */
+}
+
+.cs-box {
+  display: flex;
+  justify-content: center; /* tengah horizontal */
+  align-items: center;     /* tengah vertikal */
+  gap: 10px;               /* jarak icon & tombol */
+  margin-top: -100px;       /* naik mendekati input login */
+}
+
+#csbox {
+  background-color: #999;  /* abu-abu */
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+/* Logo atas */
+.logo-top {
+  margin-bottom: 15px;
+  
+}
+.logo-top .logo-img {
+  width: 100px;
+  height: auto;
+  border-radius: 10px;
+}
+
+
+/* INFO DI BAWAH LOGIN */
+.login-info {
+  display: flex;               /* membuat logo & teks sejajar */
+  align-items: center;         /* vertikal center */
+  justify-content: center;     /* horisontal center */
+  gap: 8px;                    /* jarak antara logo dan teks */
+  margin-top: 10px;            /* jarak dari tombol login */
+  font-size: 14px;
+  color: #555;                 /* warna teks abu-abu gelap */
+}
+
+.login-info .info-logo {
+  width: 20px;                 /* ukuran logo kecil */
+  height: auto;
+}
+
+
+
+.input-box {
+  display: flex;
+  align-items: center;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+}
+
+.input-logo {
+  width: 40px;       /* ukuran logo */
+  height: 40px;
+  margin-right: 10px; /* jarak antara logo dan input */
+}
+
+.input-box input {
+  border: none;
+  outline: none;
+  flex: 1;           /* input memenuhi sisa box */
+  font-size: 14px;
+}
+
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <img src="logo demo pinjaman.webp" class="logo">
+  <span>Pinjamanku</span>
+</div>
+
+<!-- LOGIN CARD -->
+<div id="loginCard">
+  <!-- Logo di atas -->
+  <div class="logo-top">
+    <img src="logo demo pinjaman.webp" alt="Logo" class="logo-img">
+  </div>
+
+  <!-- Judul Login -->
+  <h2>Login Akun</h2>
+
+  <!-- Input WA -->
+  <div class="input-box">
+  <img src="hp.png" class="input-logo" alt="Logo">
+  <input type="tel" id="noWa" placeholder="Masukkan Nomor HP">
+</div>
+
+  <!-- Tombol Login -->
+  <button id="loginBtn">Login</button>
+  <p id="loginMessage"></p>
+
+  <!-- Info di bawah login -->
+  <div class="login-info">
+    <img src="manner_rating_up_unselect.png" class="info-logo" alt="Logo">
+    <span>Silahkan masuk Nomor HP sesuai yang terdaftar di sistem</span>
+  </div>
+</div>
+
+<!-- Fitur CS Tengah -->
+<div class="cs-box">
+  <img src="cs.png" class="cs-icon" alt="CS Icon">
+  <button id="csbox">Bantuan CS</button>
+</div>
+
+
+
+<!-- DASHBOARD USER -->
+<div id="dashboard" style="display:none">
+
+<div id="pinjamanPage" class="page" style="display:none;">
+  <div class="card">
+    <div class="card-title">Jumlah Pinjaman</div>
+
+    <div class="row">
+      <span class="label">Pemberi Pinjaman</span>
+      <span class="value">
+        <img src="logo demo pinjaman.webp" class="value-icon">
+        Pinjaman Online
+      </span>
+    </div>
+
+    <div class="row">
+      <span class="label">Jumlah Pinjaman</span>
+      <span class="value" id="jumlahPinjaman">Memuat..</span>
+    </div>
+
+    <div class="row">
+      <span class="label">Jatuh Tempo</span>
+      <span class="value" id="jatuhTempoPinjaman">Memuat..</span>
+    </div>
+
+  </div>
+</div>
+
+<div id="tagihanPage" class="page" style="display:none">
+  <div class="card">
+    <div class="card-title">Tagihan Nasabah</div>
+    <div class="row">
+      <span class="label">Status</span>
+      <span class="value status-belum" id="statusTagihan">Memuat..</span>
+    </div>
+    <div class="row">
+      <span class="label">Total Tagihan</span>
+      <span class="value" id="totalTagihan">IDR Memuat..</span>
+    </div>
+    <div class="row">
+      <span class="label">Jatuh Tempo</span>
+      <span class="value" id="jatuhTempo">Memuat..</span>
+    </div>
+    <button class="pay-btn" onclick="openBayar()">Bayar Sekarang</button>
+  </div>
+</div>
+
+
+
+
+  <!-- BAGIAN SAYA -->
+<div id="sayaPage" class="page" style="display:none;">
+  <div class="card">
+    <div class="card-title">Data Nasabah</div>
+ <div class="ktp-container">
+  <div class="ktp-box">
+    <div class="ktp-content">
+      <img id="ktpImg" class="ktp-img" src="im_image.png" alt="Foto KTP">
+      <p>KTP</p>
+    </div>
+  </div>
+  <div class="ktp-box">
+    <div class="ktp-content">
+      <img id="selfieImg" class="ktp-img" src="im_cs_image.png" alt="Foto Selfie">
+      <p>Selfie</p>
+    </div>
+  </div>
+</div>
+    <div class="payment-box">
+      <div class="box-title">Total Jumlah Pembayaran</div>
+ <div class="payment-box">
+  <div class="row">
+    <span class="label"><img src="mine_rucksack_icon.png" class="icon"> IDR</span>
+    <span class="value" id="totalBayar">
+      Rp 0
+      <div class="order">
+        <span class="order-text" id="orderId">Order ID : -</span>
+        <img src="copy_id_icon.png" class="copy-icon" onclick="copyOrder()">
+      </div>
+    </span>
+  </div>
+</div>
+      <div class="row">
+        <span class="label"><img src="msg_icon_friend.png" class="icon"> Nama</span>
+        <span class="value" id="namaNasabah">-</span>
+      </div>
+      <div class="row">
+        <span class="label"><img src="bank.png" class="icon"> Nama Bank</span>
+        <span class="value" id="bankNasabah">-</span>
+      </div>
+      <div class="row">
+        <span class="label"><img src="verify_icon.png" class="icon"> Virtual Account</span>
+        <span class="value" id="vaNasabah">-</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!-- POPUP BAYAR -->
+<!-- POPUP PEMBAYARAN -->
+<div id="bayarPopup" class="popup-bayar">
+  <div class="popup-content">
+    <h3>Form Pembayaran</h3>
+
+    <div class="form-group">
+      <label>Nama Nasabah</label>
+      <input type="text" id="popupNama" value="" readonly>
+    </div>
+
+<div class="form-group va-box">
+  <label>Kode VA Pembayaran</label>
+  <div class="va-image" id="popupKodeVA">
+    <!-- JS akan isi kode VA di sini -->
+  </div>
+  <button id="copyVA" title="Salin Kode VA">📋 Salin Kode VA</button>
+</div>
+
+    <div class="form-group">
+      <label>Bank Pembayaran</label>
+      <input type="text" id="popupBank" value="" readonly>
+    </div>
+
+    <div class="form-group">
+  <label>Jumlah Pembayaran</label>
+  <input type="text" id="popupTagihan" value="" readonly>
+</div>
+
+    <button class="close-btn" onclick="closeBayar()">Tutup</button>
+  </div>
+</div>
+
+
+
+
+
+  <!-- NAV -->
+  <div class="bottom-nav">
+    <div class="nav-item" onclick="showPage('pinjaman')">
+      <img src="mine_rucksack_icon.png">Jumlah Pinjaman
+    </div>
+    <div class="nav-item" onclick="showPage('tagihan')">
+      <img src="tagihan2.png">Tagihan
+    </div>
+    <div class="nav-item" onclick="showPage('saya')">
+      <img src="mine_icon_normal.png">Saya
+    </div>
+  </div>
+
+</div>
+
+<!-- ====================== SCRIPT ====================== -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDa5S7LeRuudC2ZWnOsW51asyOQ2WsXZGY",
+  authDomain: "datapinjam-c6008.firebaseapp.com",
+  projectId: "datapinjam-c6008",
+  storageBucket: "datapinjam-c6008.firebasestorage.app",
+  messagingSenderId: "937287862152",
+  appId: "1:937287862152:web:7ea55a1e90be67c3591c3d"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+
+
+let userData = null; // simpan data user yang login
+
+async function loginUser() {
+    const noWa = document.getElementById("noWa").value;
+    if (!noWa) return alert("Masukkan nomor WA");
+
+    const q = query(collection(db, "users"), where("noWa", "==", noWa));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+        alert("Nomor WA tidak terdaftar");
+        return;
+    }
+
+    querySnapshot.forEach((doc) => {
+        userData = doc.data(); // simpan data user
+    });
+
+    // sembunyikan login, tampilkan dashboard
+    document.getElementById("loginUser").style.display = "none";
+    document.getElementById("pinjamanPage").style.display = "block";
+    document.getElementById("tagihanPage").style.display = "block";
+    document.getElementById("sayaPage").style.display = "block";
+
+    updateUserDashboard();
+}
+// LOGIN USER
+window.loginUser = async function(){
+  const noWa = document.getElementById("noWa").value.trim();
+  const msgEl = document.getElementById("loginMessage");
+  msgEl.textContent = "";
+
+  if(!noWa){ msgEl.textContent="Masukan nomor dahulu!"; return; }
+
+  try{
+    const q = query(collection(db, "users"), where("noWa","==",noWa));
+    const snap = await getDocs(q);
+
+    if(snap.empty){ msgEl.textContent="Nomor HP tidak terdaftar!"; return; }
+
+   userData = snap.docs[0].data();
+
+    
+    // Hide login, show dashboard
+    
+    document.getElementById("loginCard").style.display="none";
+    document.getElementById("dashboard").style.display="block";
+    showPage("pinjaman"); // tampilkan pinjamanPage setelah data diisi
+
+    // Update halaman "Saya"
+    if(document.getElementById("namaNasabah")){
+    document.getElementById("namaNasabah").innerText = userData.nama || "-";
+}
+if(document.getElementById("orderId")){
+    document.getElementById("orderId").innerText = "Order ID : " + (userData.orderId || "-");
+}
+if(document.getElementById("totalTagihan")){
+    document.getElementById("totalTagihan").innerText = "IDR " + (Number(userData.tagihan || 0)).toLocaleString();
+}
+if(document.getElementById("jatuhTempo")){
+    document.getElementById("jatuhTempo").innerText = userData.jatuhTempo || "-";
+}
+if(document.getElementById("statusTagihan")){
+    const statusEl = document.getElementById("statusTagihan");
+    statusEl.innerText = userData.status || "Belum Bayar";
+    statusEl.classList.remove("status-belum", "status-bayar");
+    if(userData.status === "Lunas") statusEl.classList.add("status-bayar");
+    else statusEl.classList.add("status-belum");
+}
+// Set data Pinjaman sesuai akun
+document.getElementById("jumlahPinjaman").innerText = 
+  userData.totalPinjaman ? "IDR " + userData.totalPinjaman.toLocaleString("id-ID") : "IDR 0";
+
+document.getElementById("jatuhTempoPinjaman").innerText = 
+  userData.jatuhTempo || "-";
+    document.getElementById("namaNasabah").innerText = userData.nama || "-";
+    document.getElementById("orderId").innerText = "Order ID : " + (userData.orderId || "-");
+    document.getElementById("totalBayar").childNodes[0].textContent = "Rp " + ((userData.totalBayar || 0).toLocaleString());
+    document.getElementById("bankNasabah").innerText = userData.bank || "-";
+    document.getElementById("vaNasabah").innerText = userData.va || "-";
+
+    // Foto KTP & Selfie
+    if(userData.ktp) document.getElementById("ktpImg").src = userData.ktp;
+    if(userData.selfie) document.getElementById("selfieImg").src = userData.selfie;
+
+    // Update popup pembayaran
+    const popupInputs = document.querySelectorAll("#bayarPopup input[readonly]");
+    popupInputs[0].value = userData.nama || "-"; // Nama Nasabah
+    popupInputs[1].value = userData.bank || "-"; // Bank
+    popupInputs[2].value = "IDR " + ((userData.tagihan || 0).toLocaleString()); // Jumlah Bayar
+
+// Update Kode VA di popup
+// Update Kode VA dari Firebase
+const vaContainer = document.getElementById("popupKodeVA");
+if(userData.kodeVA){
+    vaContainer.textContent = userData.kodeVA;
+} else {
+    vaContainer.textContent = "-";
+}
+
+// Tombol copy
+document.getElementById("copyVA").addEventListener("click", ()=>{
+    if(userData.kodeVA){
+        navigator.clipboard.writeText(userData.kodeVA);
+        alert("Kode VA berhasil disalin!");
+    }
+});
+  }catch(err){
+    console.error(err);
+    msgEl.textContent="Terjadi kesalahan, coba lagi";
+  }
+}
+document.getElementById("loginBtn").addEventListener("click",()=>window.loginUser());
+
+
+
+
+
+console.log(userData);
+
+
+
+// Update halaman Tagihan sesuai data user
+
+function updateUserDashboard(){
+
+  if(!userData) return;
+
+  // STATUS
+  document.getElementById("statusTagihan").innerText =
+  userData.status || "Belum Bayar";
+
+  // TOTAL TAGIHAN
+  document.getElementById("totalTagihan").innerText =
+  "IDR " + Number(userData.tagihan || 0).toLocaleString();
+
+  // JATUH TEMPO
+  document.getElementById("jatuhTempo").innerText =
+  userData.jatuhTempo || "-";
+
+}
+
+
+
+</script>
+
+<script>
+  
+// tombol login
+
+function openBayar(){ document.getElementById("bayarPopup").style.display="flex"; }
+function closeBayar(){ document.getElementById("bayarPopup").style.display="none"; }
+
+function showPage(page){
+  document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+  document.getElementById(page+"Page").style.display="block";
+}
+
+function copyOrder(){
+  const text = document.getElementById("orderId").innerText;
+  navigator.clipboard.writeText(text);
+  alert("Order ID berhasil disalin");
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>
