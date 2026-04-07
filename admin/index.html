@@ -13,6 +13,7 @@ body {
 
 /* SIDEBAR */
 .sidebar {
+  position: fixed;
   width:230px;
   height:100vh;
   background:linear-gradient(180deg,#0f172a,#1e293b);
@@ -20,6 +21,12 @@ body {
   position:fixed;
   padding:20px;
   border-radius: 10px;
+  left: 0;
+  top: 0;
+}
+
+.page {
+  margin-left: 260px;
 }
 
 .sidebar h2 {
@@ -395,6 +402,118 @@ td[data-field="kodeVA"] {
 }
 
 
+/* ===== VS CODE STYLE ===== */
+.vscode-container{
+  position: fixed;   /* 🔥 ini kunci */
+  top: 0;
+  left: 260px;       /* sesuaikan lebar sidebar admin kamu */
+  right: 0;
+  bottom: 0;
+  
+  display: flex;
+  background: #1e1e1e;
+  color: #fff;
+  font-family: Consolas, monospace;
+}
+
+/* SIDEBAR */
+.vscode-sidebar{
+  width: 200px;
+  background: #252526;
+  padding: 10px;
+  border-right: 1px solid #333;
+}
+
+.vscode-sidebar h4{
+  font-size: 12px;
+  color: #ccc;
+  margin-bottom: 10px;
+}
+
+.file-item{
+  padding: 6px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.file-item:hover{
+  background: #37373d;
+}
+
+/* MAIN EDITOR */
+.vscode-main{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* TOP BAR */
+.vscode-header{
+  background: #2d2d2d;
+  padding: 10px;
+  border-bottom: 1px solid #333;
+}
+
+/* EDITOR */
+#codeEditor{
+  flex: 1;
+  background: #1e1e1e;
+  color: #d4d4d4;
+  border: none;
+  outline: none;
+  padding: 15px;
+  font-size: 14px;
+  resize: none;
+}
+
+/* PREVIEW */
+#previewFrame {
+    width: 100%;
+    height: 45%;
+}
+
+
+/* OUTPUT CONTAINER */
+.vscode-output{
+  background:#1e1e1e;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:15px;
+  border:1px solid #333;
+}
+
+/* HEADER */
+.vscode-output-header{
+  background:#2d2d2d;
+  padding:8px 12px;
+  font-size:13px;
+  color:#ccc;
+  border-bottom:1px solid #333;
+}
+
+/* IFRAME */
+.vscode-output-frame{
+  width:100%;
+  height:220px;
+  border:none;
+  background:white;
+}
+
+/* BIKIN PAGE KHUSUS VS CODE FULL */
+#vscode.page{
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* HAPUS BATAS CARD KALAU ADA */
+#vscode .card{
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+
 </style>
 </head>
 
@@ -440,6 +559,7 @@ td[data-field="kodeVA"] {
   <button onclick="show('peminjam', this)">Peminjam</button>
   <button onclick="show('va', this)">Virtual Account</button>
   <button onclick="showContact(this)">Pengaturan</button>
+  <button onclick="show('vscode', this)">Atur Iklan</button>
 </div>
 
 <div class="content">
@@ -602,6 +722,50 @@ td[data-field="kodeVA"] {
 
 </div>
 
+
+
+
+<div id="vscode" class="page" style="display:none;">
+
+  <div class="vscode-container">
+
+    <!-- SIDEBAR -->
+    <div class="vscode-sidebar">
+      <h4>EXPLORER</h4>
+      <div class="file-item">index.html</div>
+      <div class="file-item">style.css</div>
+      <div class="file-item">script.js</div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="vscode-main">
+
+      <!-- HEADER -->
+      <div class="vscode-header">
+        <input type="text" id="judulCode" placeholder="Nama File..." style="padding:6px;border-radius:5px;border:none;">
+        <button onclick="simpanCode()">💾 Save</button>
+      </div>
+
+      <!-- EDITOR -->
+      <textarea id="codeEditor"></textarea>
+
+      <!-- PREVIEW -->
+      <iframe id="previewFrame"></iframe>
+
+    </div>
+
+  </div>
+
+  <!-- DATA TERSIMPAN -->
+
+</div>
+
+  <div class="card" style="margin-top:15px;">
+    <h3>Data Code Tersimpan</h3>
+    <div id="listCode"></div>
+  </div>
+
+
 </div>
 
 <script type="module">
@@ -621,6 +785,8 @@ import {
   updateDoc,
   deleteDoc,
   query,
+  setDoc,
+  onSnapshot,
   orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
@@ -660,6 +826,82 @@ const storage = getStorage(app);
 
 
 
+
+
+/* ================== BASE64 UTF-8 SAFE ================== */
+function encodeBase64(str) {
+  return btoa(unescape(encodeURIComponent(str)));
+}
+
+function decodeBase64(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+
+/* ================== SIMPAN CODE ================== */
+window.simpanCode = async function () {
+  try {
+    const judul = document.getElementById("judulCode").value;
+    const code = document.getElementById("codeEditor").value;
+
+    if (!code) {
+      alert("Code kosong!");
+      return;
+    }
+
+    // 🔥 GANTI addDoc → setDoc (1 document saja)
+    await setDoc(doc(db, "visual_code", "main_code"), {
+      judul: judul || "Tanpa Judul",
+      code: encodeBase64(code),
+      created: new Date()
+    });
+
+    document.getElementById("previewFrame").srcdoc = code;
+
+    alert("Code berhasil disimpan!");
+
+  } catch (err) {
+    console.error("ERROR SIMPAN:", err);
+  }
+};
+
+/* ================== LOAD DATA (ANTI HILANG) ================== */
+const list = document.getElementById("listCode");
+
+// 🔥 GANTI collection → doc (ambil 1 data saja)
+onSnapshot(doc(db, "visual_code", "main_code"), (docSnap) => {
+  if (!list || !docSnap.exists()) return;
+
+  const data = docSnap.data();
+
+  let html;
+  try {
+    html = decodeBase64(data.code);
+  } catch {
+    html = data.code; // fallback data lama
+  }
+
+  // 🔥 isi editor saat load
+  const editor = document.getElementById("codeEditor");
+  if (editor) editor.value = html;
+
+  // 🔥 preview utama
+  const iframe = document.getElementById("previewFrame");
+  if (iframe) iframe.srcdoc = html;
+
+
+});
+
+/* ================== LIVE PREVIEW ================== */
+document.addEventListener("DOMContentLoaded", () => {
+  const editor = document.getElementById("codeEditor");
+  const iframe = document.getElementById("previewFrame");
+
+  if (editor && iframe) {
+    editor.addEventListener("input", function () {
+      iframe.srcdoc = this.value;
+    });
+  }
+});
 
 
 // NAV
@@ -1161,7 +1403,14 @@ async function loadContactUser(){
     console.error("❌ ERROR FIREBASE:", err);
   }
 }
+
+
+
+
+
 </script>
+
+
 
 </body>
 
