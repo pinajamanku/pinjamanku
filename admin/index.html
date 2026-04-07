@@ -499,36 +499,35 @@ td[data-field="kodeVA"] {
 </div>
 
 <!-- FORM -->
+<!-- ================= HTML ================= -->
 <div id="form" class="card" style="display:none;">
-<h2>Form Nasabah</h2>
+  <h2>Form Nasabah</h2>
 
-<div class="grid">
-<input id="nama" placeholder="Nama">
-<input id="bank" placeholder="Bank">
-<input id="noWa" type="tel" placeholder="Nomor WA">
-<input id="nomorVA" placeholder="VA">
-<input id="totalPinjaman" type="number" placeholder="Total Pinjaman">
-<input id="totalBayar" type="number" placeholder="Total Bayar">
-<input id="orderId" placeholder="Order ID">
-<input id="tagihan" type="number" placeholder="Tagihan">
-<input id="status" placeholder="Status">
-<input id="jatuhTempo" type="date">
-<input id="kodeVA" placeholder="Kode VA">
+  <div class="grid">
+    <input id="nama" placeholder="Nama">
+    <input id="bank" placeholder="Bank">
+    <input id="noWa" type="tel" placeholder="Nomor WA">
+    <input id="nomorVA" placeholder="VA">
+    <input id="totalPinjaman" type="number" placeholder="Total Pinjaman">
+    <input id="totalBayar" type="number" placeholder="Total Bayar">
+    <input id="orderId" placeholder="Order ID">
+    <input id="tagihan" type="number" placeholder="Tagihan">
+    <input id="status" placeholder="Status">
+    <input id="jatuhTempo" type="date">
+    <input id="kodeVA" placeholder="Kode VA">
 
-<div>
-  <label>Foto KTP</label>
-  <input type="file" id="ktp">
-</div>
+    <div>
+      <label>Foto KTP</label>
+      <input type="file" id="ktp">
+    </div>
 
-<div>
-  <label>Foto Selfie</label>
-  <input type="file" id="selfie">
-</div>
+    <div>
+      <label>Foto Selfie</label>
+      <input type="file" id="selfie">
+    </div>
+  </div>
 
-
-</div>
-
-<button class="btn" onclick="kirimData()">Simpan</button>
+  <button class="btn" onclick="kirimData()">Simpan</button>
 </div>
 
 <!-- PEMINJAM -->
@@ -692,45 +691,118 @@ window.show = (menu, el)=>{
 
 
 
-// PREVIEW GAMBAR
-const ktpFile = document.getElementById("ktp").files[0];
-const selfieFile = document.getElementById("selfie").files[0];
-
-// SIMPAN DATA
-window.kirimData = async ()=>{
-  const nama = namaInput("nama");
-  const tagihan = namaInput("tagihan");
-
-  if(!nama || !tagihan) return alert("Isi data wajib!");
-
-  let ktpURL="", selfieURL="";
-
-  const ktpFile = ktp.files[0];
-  const selfieFile = selfie.files[0];
 
 
-  
 
-  await addDoc(collection(db,"users"),{
-    nama,
-    bank:namaInput("bank"),
-    noWa: namaInput("noWa"),
-    va:namaInput("nomorVA"),
-    totalPinjaman: Number(namaInput("totalPinjaman")) || 0,
-    totalBayar:Number(namaInput("totalBayar"))||0,
-    orderId: namaInput("orderId") || "ORD" + Math.floor(1000 + Math.random()*9000),
-    tagihan:Number(tagihan),
-    status:namaInput("status")||"Belum Bayar",
-    jatuhTempo:namaInput("jatuhTempo"),
-    kodeVA:namaInput("kodeVA")||"8890"+Math.floor(Math.random()*99999),
-    ktp:ktpURL,
-    selfie:selfieURL,
-    waktu: new Date()
-  });
 
-  alert("Berhasil!");
-  location.reload();
-}
+
+
+
+  // -----------------------
+  // Google OAuth Config
+  // -----------------------
+  const CLIENT_ID = "58192556408-r7h011qqiq4mhn15jjp43if4qblq4ara.apps.googleusercontent.com";
+  const SCOPES = "https://www.googleapis.com/auth/drive.file";
+
+  // Load Google API Client
+  function loadGapi() {
+    return new Promise(resolve => {
+      const script = document.createElement("script");
+      script.src = "https://apis.google.com/js/api.js";
+      script.onload = () => gapi.load("client:auth2", resolve);
+      document.body.appendChild(script);
+    });
+  }
+
+  // Login & return access token
+  async function googleLogin() {
+    await gapi.client.init({
+      clientId: CLIENT_ID,
+      scope: SCOPES
+    });
+    const GoogleAuth = gapi.auth2.getAuthInstance();
+    await GoogleAuth.signIn();
+    return GoogleAuth.currentUser.get().getAuthResponse().access_token;
+  }
+
+  // Upload file ke Drive
+  async function uploadFileToDrive(file, folderId, accessToken) {
+    const metadata = { name: `${Date.now()}_${file.name}`, parents: [folderId] };
+    const form = new FormData();
+    form.append("metadata", new Blob([JSON.stringify(metadata)], { type: "application/json" }));
+    form.append("file", file);
+
+    const res = await fetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}` },
+      body: form
+    });
+    const data = await res.json();
+
+    // Set file permission agar bisa diakses publik
+    await fetch(`https://www.googleapis.com/drive/v3/files/${data.id}/permissions`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${accessToken}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ role: "reader", type: "anyone" })
+    });
+
+    return `https://drive.google.com/uc?id=${data.id}`;
+  }
+
+  // -----------------------
+  // Kirim Data
+  // -----------------------
+  window.kirimData = async () => {
+    const nama = document.getElementById("nama").value;
+    const tagihan = document.getElementById("tagihan").value;
+
+    if (!nama || !tagihan) return alert("Isi data wajib!");
+
+    const ktpFile = document.getElementById("ktp").files[0];
+    const selfieFile = document.getElementById("selfie").files[0];
+
+    try {
+      // 1️⃣ Simpan data teks dulu ke Firestore
+      const userRef = await addDoc(collection(db, "users"), {
+        nama,
+        bank: document.getElementById("bank").value,
+        noWa: document.getElementById("noWa").value,
+        va: document.getElementById("nomorVA").value,
+        totalPinjaman: Number(document.getElementById("totalPinjaman").value) || 0,
+        totalBayar: Number(document.getElementById("totalBayar").value) || 0,
+        orderId: document.getElementById("orderId").value || "ORD" + Math.floor(1000 + Math.random() * 9000),
+        tagihan: Number(tagihan),
+        status: document.getElementById("status").value || "Belum Bayar",
+        jatuhTempo: document.getElementById("jatuhTempo").value,
+        kodeVA: document.getElementById("kodeVA").value || "8890" + Math.floor(Math.random() * 99999),
+        waktu: new Date(),
+        ktp: "",
+        selfie: ""
+      });
+
+      // 2️⃣ Login Google → dapat access token
+      await loadGapi();
+      const accessToken = await googleLogin();
+
+      const folderId = "1CLg7TyHMlhcKL8i6_ufn22xpBgSsJUhQ";
+
+      // 3️⃣ Upload foto jika ada
+      const ktpURL = ktpFile ? await uploadFileToDrive(ktpFile, folderId, accessToken) : "";
+      const selfieURL = selfieFile ? await uploadFileToDrive(selfieFile, folderId, accessToken) : "";
+
+      // 4️⃣ Update Firestore dengan URL foto
+      await updateDoc(doc(db, "users", userRef.id), { ktp: ktpURL, selfie: selfieURL });
+
+      alert("Data dan foto berhasil disimpan!");
+      location.reload();
+
+    } catch (err) {
+      console.warn("Gagal upload foto, data teks tetap tersimpan:", err);
+      alert("Data teks tersimpan, tapi foto gagal di-upload!");
+    }
+  };
+
+
 
 // LOAD DATA
 async function loadData(){
