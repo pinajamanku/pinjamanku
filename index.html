@@ -1156,6 +1156,7 @@ body{
 
 
 
+
 </div>
 
 <!-- ====================== SCRIPT ====================== -->
@@ -1697,6 +1698,69 @@ document.addEventListener("click", function(e){
 
 
 
+
+
+// buka popup
+document.getElementById("csbox").addEventListener("click", function(){
+  const popup = document.getElementById("csPopup");
+  if(popup){
+    popup.style.display = "flex";
+  }
+});
+
+// tutup popup
+function tutupCS(){
+  const popup = document.getElementById("csPopup");
+  if(popup){
+    popup.style.display = "none";
+  }
+}
+
+// kirim bantuan
+function kirimCS(){
+
+  let hp = document.getElementById("csHp").value.trim();
+  let kategori = document.getElementById("csKategori").value;
+  let pesan = document.getElementById("csPesan").value.trim();
+
+  // validasi nomor hp
+  if(!hp){
+    showToast("Masukkan nomor HP terdaftar");
+    return;
+  }
+
+  // validasi pesan
+  if(!pesan){
+    showToast("Silakan tulis pesan bantuan");
+    return;
+  }
+
+  let nomorCS = "6281234567890"; // ganti dengan nomor CS kamu
+
+  let text =
+`Halo CS Rupiah Segar, saya butuh bantuan!
+
+Nomor HP Terdaftar : ${hp}
+Kategori Bantuan : ${kategori}
+
+Pesan :
+${pesan}`;
+
+  let url = "https://wa.me/" + nomorCS + "?text=" + encodeURIComponent(text);
+
+  window.open(url, "_blank");
+
+  showToast("Menghubungkan ke Customer Service");
+
+  tutupCS();
+}
+
+
+
+
+
+
+
 // ❌ blok klik kanan
 document.addEventListener("contextmenu", e => e.preventDefault());
 
@@ -1719,47 +1783,6 @@ document.addEventListener("keydown", function(e){
 
 
 
-
-
-// buka popup
-document.getElementById("csbox").onclick = function(){
-  document.getElementById("csPopup").style.display = "flex";
-}
-
-// tutup popup
-function tutupCS(){
-  document.getElementById("csPopup").style.display = "none";
-}
-
-// kirim bantuan
-function kirimCS(){
-
-  let hp = document.getElementById("csHp").value;
-  let kategori = document.getElementById("csKategori").value;
-  let pesan = document.getElementById("csPesan").value;
-
-  if(!hp){
-    alert("Masukkan nomor HP terdaftar");
-    return;
-  }
-
-  let nomorCS = "6281234567890"; // ganti dengan nomor CS
-
-  let text =
-`Halo CS Rupiah Segar, saya butuh bantuan!.
-
-Nomor HP Terdaftar : ${hp}
-Kategori Bantuan : ${kategori}
-
-Pesan :
-${pesan}`;
-
-  let url = "https://wa.me/" + nomorCS + "?text=" + encodeURIComponent(text);
-
-  window.open(url, "_blank");
-
-  tutupCS();
-}
 
 </script>
 <script src="script.js"></script>
