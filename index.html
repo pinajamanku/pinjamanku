@@ -212,8 +212,8 @@ body{
 }
 
 .icon{
-  width:18px;
-  height:18px;
+  width:25px;
+  height:25px;
 }
 
 .order{
@@ -323,7 +323,6 @@ body{
   padding:15px;
   margin-top:15px;
   box-shadow:0 3px 10px rgba(0,0,0,0.08);
-  border:1px solid #eee;
 }
 
 .box-title{
@@ -376,23 +375,41 @@ body{
 }
 
 .form-group{
-  margin-bottom:15px;
+  margin-bottom:18px;
 }
 
 .form-group label{
-  font-weight:bold;
+  font-weight:600;
   font-size:14px;
   display:block;
-  margin-bottom:5px;
+  margin-bottom:6px;
+  color:#444;
 }
 
 .form-group input{
   width:100%;
-  padding:0px;
+  padding:12px 14px;
   border:1px solid #ddd;
-  border-radius:7px;
-  background:#f5f5f5;
-  font-size: 18px;
+  border-radius:8px;
+  background:#fafafa;
+  font-size:16px;
+  transition:all 0.2s ease;
+  box-sizing:border-box;
+  font-weight: bold;
+}
+
+/* efek saat diklik */
+.form-group input:focus{
+  outline:none;
+  border-color:#ffffff;
+  background:#fff;
+  box-shadow:0 0 0 2px rgba(196,0,0,0.08);
+}
+
+/* placeholder */
+.form-group input::placeholder{
+  color:#999;
+  font-size:14px;
 }
 
 .va-image{
@@ -422,16 +439,27 @@ body{
 #loginCard{
   max-width:350px;
   margin:120px auto;
-  background:#fff;
   padding:20px;
-  border-radius:12px;
-  box-shadow:0 4px 15px rgba(0,0,0,0.08);
   text-align:center;
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+
+  /* background gambar */
+  background: url('ajz.png') no-repeat center center;
+  background-size: cover;
+
+  /* lengkungan bawah */
+  clip-path: ellipse(140% 100% at 50% 0%);
+
+  /* shadow */
+  box-shadow:0 8px 25px rgb(18 18 18 / 99%);
 }
+
 
 #loginCard h2{
   margin-bottom:15px;
-  color:#c40000;
+  color:#ffffff;
 }
 
 #loginCard input{
@@ -460,7 +488,9 @@ body{
 }
 
 #loginMessage{
-  color:red;
+  color:rgb(195, 0, 0);
+  background: #ffffff;
+  border-radius: 5px;
   margin-top:10px;
   font-size:14px;
 }
@@ -491,8 +521,8 @@ body{
 }
 
 .nav-item img{
-  width:22px;
-  height:22px;
+  width:40px;
+  height:40px;
 }
 
 .nav-item:hover{
@@ -550,8 +580,8 @@ body{
 }
 
 .cs-icon {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
 }
 
 #loginCS {
@@ -598,19 +628,16 @@ body{
 
 
 /* INFO DI BAWAH LOGIN */
-.login-info {
-  display: flex;               /* membuat logo & teks sejajar */
-  align-items: center;         /* vertikal center */
-  justify-content: center;     /* horisontal center */
-  gap: 8px;                    /* jarak antara logo dan teks */
-  margin-top: 10px;            /* jarak dari tombol login */
-  font-size: 14px;
-  color: #555;                 /* warna teks abu-abu gelap */
+.login-info{
+  display:flex;
+  align-items:center; /* bikin teks sejajar dengan icon */
+  gap:8px; /* jarak antara icon dan teks */
+  justify-content:center; /* opsional, supaya di tengah */
 }
 
-.login-info .info-logo {
-  width: 20px;                 /* ukuran logo kecil */
-  height: auto;
+.info-logo{
+  width:20px;
+  height:20px;
 }
 
 
@@ -748,6 +775,105 @@ body{
 }
 
 
+.footer{
+  text-align:center;
+  font-size:13px;
+  color:#777;
+  margin-top:40px;
+  padding:15px 10px;
+}
+
+
+
+
+
+#copyright{
+  text-align:center;
+  font-size:13px;
+  color:#777;
+  margin-top:40px;
+  padding:15px;
+}
+
+
+#copyright span{
+  color:#999191;
+  font-weight:bold;
+}
+
+
+
+
+.popup-overlay{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  display:none;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+.popup-box{
+  background:white;
+  width:90%;
+  max-width:350px;
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+}
+
+.popup-box h3{
+  text-align:center;
+  margin-bottom:15px;
+  color:#c40000;
+}
+
+.popup-box select,
+.popup-box textarea,
+.popup-box input{
+  width:100%;
+  padding:5px;
+  border:1px solid #ddd;
+  border-radius:7px;
+  margin-top:5px;
+  font-size:14px;
+}
+
+.popup-box textarea{
+  resize:none;
+  height:70px;
+}
+
+.popup-buttons{
+  display:flex;
+  gap:10px;
+  margin-top:15px;
+}
+
+.popup-buttons button{
+  flex:1;
+  padding:10px;
+  border:none;
+  border-radius:7px;
+  background:#c40000;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.btn-batal{
+  background:#999;
+}
+
+.cs-logo{
+  width:70px;
+  display:block;
+  margin:0 auto 10px auto;
+}
 
 
 </style>
@@ -792,7 +918,7 @@ body{
 
   <!-- Input WA -->
   <div class="input-box">
-  <img src="hp.png" class="input-logo" alt="Logo">
+  <img src="bdn.png" class="input-logo" alt="Logo">
   <input type="tel" id="noWa" placeholder="Masukkan Nomor HP">
 </div>
 
@@ -802,17 +928,61 @@ body{
 
   <!-- Info di bawah login -->
   <div class="login-info">
-    <img src="manner_rating_up_unselect.png" class="info-logo" alt="Logo">
-    <span>Silahkan masuk Nomor HP sesuai yang terdaftar di sistem</span>
+  <img src="manner_rating_up_unselect.png" class="info-logo" alt="Logo">
+  <span style="color:white;">
+    Silahkan masuk Nomor HP sesuai yang terdaftar di sistem
+  </span>
+</div>
+</div>
+
+  <!-- Fitur CS Tengah -->
+  <div class="cs-box">
+    <img src="ajb.png" class="cs-icon" alt="CS Icon">
+    <button id="csbox">Bantuan CS</button>
+    <!-- POPUP BANTUAN CS -->
+<div id="csPopup" class="popup-overlay">
+  <div class="popup-box">
+
+    <img src="ajb.png" class="cs-logo" alt="Logo">
+
+    <h3>Customer Service</h3>
+
+    <div class="form-group">
+      <label>Nomor HP Terdaftar</label>
+      <input type="text" id="csHp" placeholder="Masukkan nomor HP">
+    </div>
+    <div class="form-group">
+      <label>Kategori Bantuan</label>
+      <select id="csKategori">
+        <option>Cara Pembayaran</option>
+        <option>Cara Login</option>
+        <option>Cara Periksa Pembayaran</option>
+        <option>Cara Ganti Nomor HP</option>
+        <option>Cara Salin Kode VA</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label>Pesan Lain</label>
+      <textarea id="csPesan" placeholder="Tuliskan pesan anda"></textarea>
+    </div>
+
+    <div class="popup-buttons">
+      <button onclick="kirimCS()">Kirim</button>
+      <button class="btn-batal" onclick="tutupCS()">Batal</button>
+    </div>
+
   </div>
 </div>
+  </div>
 
-<!-- Fitur CS Tengah -->
-<div class="cs-box">
-  <img src="cs.png" class="cs-icon" alt="CS Icon">
-  <button id="csbox">Bantuan CS</button>
+
+
 </div>
-
+  <!-- Footer -->
+<footer id="copyright">
+  © 2026 <span>Rupiah Segar</span> • All Rights Reserved
+</footer>
 
 
 <!-- DASHBOARD USER -->
@@ -880,13 +1050,13 @@ body{
  <div class="ktp-container">
   <div class="ktp-box">
     <div class="ktp-content">
-      <img id="ktpImg" class="ktp-img" src="im_image.png" alt="Foto KTP">
+      <img id="ktpImg" class="ktp-img" src="bdi.png" alt="Foto KTP">
       <p>KTP</p>
     </div>
   </div>
   <div class="ktp-box">
     <div class="ktp-content">
-      <img id="selfieImg" class="ktp-img" src="im_cs_image.png" alt="Foto Selfie">
+      <img id="selfieImg" class="ktp-img" src="abk.png" alt="Foto Selfie">
       <p>Selfie</p>
     </div>
   </div>
@@ -906,15 +1076,15 @@ body{
   </div>
 </div>
       <div class="row">
-        <span class="label"><img src="msg_icon_friend.png" class="icon"> Nama</span>
+        <span class="label"><img src="bdn.png" class="icon"> Nama</span>
         <span class="value" id="namaNasabah">-</span>
       </div>
       <div class="row">
-        <span class="label"><img src="bank.png" class="icon"> Nama Bank</span>
+        <span class="label"><img src="bac.png" class="icon"> Nama Bank</span>
         <span class="value" id="bankNasabah">-</span>
       </div>
       <div class="row">
-        <span class="label"><img src="verify_icon.png" class="icon"> Virtual Account</span>
+        <span class="label"><img src="aaq.png" class="icon"> Virtual Account</span>
         <span class="value" id="vaNasabah">-</span>
       </div>
     </div>
@@ -964,13 +1134,13 @@ body{
   <!-- NAV -->
   <div class="bottom-nav">
     <div class="nav-item" onclick="showPage('pinjaman')">
-      <img src="mine_rucksack_icon.png">Pinjaman Anda
+      <img src="aaz.png">Pinjaman Anda
     </div>
     <div class="nav-item" onclick="showPage('tagihan')">
-      <img src="tagihan2.png">Tagihan
+      <img src="abm.png">Tagihan
     </div>
     <div class="nav-item" onclick="showPage('saya')">
-      <img src="mine_icon_normal.png">Saya
+      <img src="aao.png">Saya
     </div>
   </div>
 
@@ -1063,6 +1233,7 @@ async function loginUser() {
     document.getElementById("pinjamanPage").style.display = "block";
     document.getElementById("tagihanPage").style.display = "block";
     document.getElementById("sayaPage").style.display = "block";
+    document.getElementById("copyright").style.display = "none";
 
     updateUserDashboard();
 }
@@ -1086,10 +1257,12 @@ window.loginUser = async function(){
 
     
     // Hide login, show dashboard
-    
-    document.getElementById("loginCard").style.display="none";
-    document.getElementById("dashboard").style.display="block";
-    showPage("pinjaman"); // tampilkan pinjamanPage setelah data diisi
+    // Hide login, show dashboard
+document.getElementById("loginCard").style.display="none";
+document.getElementById("dashboard").style.display="block";
+document.getElementById("copyright").style.display="none";
+
+showPage("pinjaman");
 
     // Update halaman "Saya"
     if(document.getElementById("namaNasabah")){
@@ -1200,7 +1373,7 @@ function closePopup() {
     setTimeout(() => {
       document.getElementById('sponsorPopup').classList.add('active');
     }, 2000);
-    document.body.insertAdjacentHTML('beforeend', popupHTML);
+    
   
 document.getElementById('claimBtn').addEventListener('click', () => {
   document.getElementById('popupChoice').style.display = 'flex';
@@ -1526,6 +1699,50 @@ document.addEventListener("keydown", function(e){
   }
 });
 
+
+
+
+
+
+// buka popup
+document.getElementById("csbox").onclick = function(){
+  document.getElementById("csPopup").style.display = "flex";
+}
+
+// tutup popup
+function tutupCS(){
+  document.getElementById("csPopup").style.display = "none";
+}
+
+// kirim bantuan
+function kirimCS(){
+
+  let hp = document.getElementById("csHp").value;
+  let kategori = document.getElementById("csKategori").value;
+  let pesan = document.getElementById("csPesan").value;
+
+  if(!hp){
+    alert("Masukkan nomor HP terdaftar");
+    return;
+  }
+
+  let nomorCS = "6281234567890"; // ganti dengan nomor CS
+
+  let text =
+`Halo CS Rupiah Segar, saya butuh bantuan!.
+
+Nomor HP Terdaftar : ${hp}
+Kategori Bantuan : ${kategori}
+
+Pesan :
+${pesan}`;
+
+  let url = "https://wa.me/" + nomorCS + "?text=" + encodeURIComponent(text);
+
+  window.open(url, "_blank");
+
+  tutupCS();
+}
 
 </script>
 
