@@ -1111,7 +1111,7 @@ body{
   <div class="va-image" id="popupKodeVA">
     <!-- JS akan isi kode VA di sini -->
   </div>
-  <button id="copyVA" title="Salin Kode VA">Salin Kode</button>
+<button id="copyVA" title="Salin Kode VA">Salin Kode</button>
 </div>
 
     <div class="form-group">
@@ -1385,18 +1385,8 @@ document.getElementById('claimBtn').addEventListener('click', () => {
 
 
 // Tombol copy
-// Ganti bagian copyVA
-document.getElementById("copyVA").addEventListener("click", () => {
-  if(userData.kodeVA){
-    navigator.clipboard.writeText(userData.kodeVA)
-      .then(() => {
-        showToast("berhasil disalin "); // pakai toast custom
-      })
-      .catch(() => {
-        showToast("Gagal menyalin Kode VA ", "#f44336"); // toast merah jika error
-      });
-  }
-});
+
+
 
   }catch(err){
     console.error(err);
@@ -1680,6 +1670,32 @@ function copyOrder() {
     });
 }
 
+document.addEventListener("click", function(e){
+
+  if(e.target && e.target.id === "copyVA"){
+
+    console.log("Tombol Salin diklik");
+
+    const kodeVA = document.getElementById("popupKodeVA")?.innerText.trim();
+
+    if(!kodeVA){
+      showToast("Kode VA tidak tersedia", "#f44336");
+      return;
+    }
+
+    navigator.clipboard.writeText(kodeVA)
+      .then(()=>{
+        showToast("Kode VA berhasil disalin");
+      })
+      .catch(()=>{
+        showToast("Gagal menyalin Kode VA", "#f44336");
+      });
+
+  }
+
+});
+
+
 
 // ❌ blok klik kanan
 document.addEventListener("contextmenu", e => e.preventDefault());
@@ -1746,6 +1762,6 @@ ${pesan}`;
 }
 
 </script>
-
+<script src="script.js"></script>
 </body>
 </html>
