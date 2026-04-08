@@ -686,6 +686,70 @@ body{
   opacity: 1;
 }
 
+
+
+
+#sponsorBox {
+  position: fixed;
+  bottom: 90px;
+  right: 12px;
+  width: 140px;
+  height: 180px;
+  
+  border-radius: 16px;
+  overflow: hidden;
+  
+  background: linear-gradient(145deg, #ffffff, #f1f1f1);
+  box-shadow: 
+    0 10px 25px rgba(0,0,0,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  transition: all 0.3s ease;
+  z-index: 999;
+   animation: slideUp 0.5s ease;
+}
+
+
+#sponsorFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 16px;
+}
+#sponsorBox:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 
+    0 15px 35px rgba(0,0,0,0.25);
+}
+
+
+.closeSponsor {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font-size: 12px;
+  background: rgba(0,0,0,0.5);
+  color: white;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+}
+
+.closeSponsor:hover {
+  background: red;
+}
+
+
+
+
 </style>
 </head>
 <body>
@@ -777,7 +841,15 @@ body{
     </div>
 
   </div>
+
+
+
+
 </div>
+
+
+
+
 
 <div id="tagihanPage" class="page" style="display:none">
   <div class="card">
@@ -921,7 +993,7 @@ import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 
 // FIRESTORE (untuk users)
-import { getFirestore, collection, query, where, getDocs, doc, getDoc } 
+import { getFirestore, collection, query, where, getDocs, doc,onSnapshot, getDoc } 
 from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 // REALTIME DB (untuk kontak)
@@ -941,7 +1013,32 @@ const db = getFirestore(app);
 const rtdb = getDatabase(app);
 
 
+/* BASE64 */
+function decodeBase64(str) {
+  return decodeURIComponent(escape(atob(str)));
+}
+let sponsorHTML = "";
 
+onSnapshot(doc(db, "visual_code", "main_code"), (docSnap) => {
+  if (!docSnap.exists()) return;
+
+  let html = docSnap.data().code;
+
+  try {
+    html = decodeURIComponent(escape(atob(html)));
+  } catch {}
+
+  html = html
+    .replace(/<!DOCTYPE.*?>/gi, "")
+    .replace(/<html.*?>/gi, "")
+    .replace(/<\/html>/gi, "")
+    .replace(/<head.*?>[\s\S]*?<\/head>/gi, "")
+    .replace(/<body.*?>/gi, "")
+    .replace(/<\/body>/gi, "");
+
+  sponsorHTML = html; // ✅ HANYA SIMPAN
+  console.log("📦 Sponsor siap ditampilkan");
+});
 
 let userData = null; // simpan data user yang login
 
@@ -969,6 +1066,8 @@ async function loginUser() {
 
     updateUserDashboard();
 }
+
+
 // LOGIN USER
 window.loginUser = async function(){
   const noWa = document.getElementById("noWa").value.trim();
@@ -1040,6 +1139,76 @@ const vaContainer = document.getElementById("popupKodeVA");
 if(vaContainer){
     vaContainer.textContent = userData.kodeVA || "-";
 }
+
+// 🔥 tampilkan sponsor setelah login
+setTimeout(() => {
+
+  if (!sponsorHTML) {
+    console.log("❌ sponsor belum siap");
+    return;
+  }
+
+  if (!document.getElementById("sponsorPopup")) {
+    document.body.insertAdjacentHTML("beforeend", sponsorHTML);
+
+    setTimeout(() => {
+      document.getElementById("sponsorPopup")?.classList.add("active");
+    }, 300);
+  }
+
+}, 2000);
+
+// letakkan di user page
+document.addEventListener("click", function(e){
+  if(e.target.matches("#sponsorPopup .popup-header button")){ // tombol close
+    const popup = e.target.closest(".popup-overlay");
+    if(popup) popup.classList.remove("active");
+  }
+});
+
+function closePopup() {
+  const popup = document.getElementById("popupSponsor"); // sesuaikan ID
+  if (popup) {
+    popup.style.display = "none"; // sembunyikan popup
+    console.log("Popup ditutup ✅");
+  } else {
+    console.log("❌ Elemen popup tidak ditemukan");
+  }
+}
+
+
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+
+    // event listeners
+    document.getElementById('closePopupBtn').addEventListener('click', () => {
+      document.getElementById('sponsorPopup').remove();
+    });
+
+    document.getElementById('claimBtn').addEventListener('click', () => {
+      document.getElementById('popupChoice').style.display = 'flex';
+    });
+
+    document.getElementById('waBtn').addEventListener('click', () => {
+      window.open(data.btnLinks.wa, '_blank');
+    });
+
+    document.getElementById('siteBtn').addEventListener('click', () => {
+      window.open(data.btnLinks.site, '_blank');
+    });
+
+    // tampilkan popup otomatis
+    setTimeout(() => {
+      document.getElementById('sponsorPopup').classList.add('active');
+    }, 2000);
+    document.body.insertAdjacentHTML('beforeend', popupHTML);
+  
+document.getElementById('claimBtn').addEventListener('click', () => {
+  document.getElementById('popupChoice').style.display = 'flex';
+
+});
+
+
+
 
 // Tombol copy
 // Ganti bagian copyVA
