@@ -27,12 +27,17 @@ body{
   display: flex;
   justify-content: space-between; /* kiri di kiri, kanan di kanan */
   align-items: center;
-  padding: 10px 20px;
+  padding: 13px 2px;
   background: #b10808;
-  position: relative;
-  border-radius: 10px;
+  position: fixed;
+  border-radius: 1px 1px 14px 11px;
   color: #fff;
   font-weight: bold;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999; 
+  
 }
 
 /* Kiri: logo + teks */
@@ -57,6 +62,7 @@ body{
 /* Kanan: logo menu */
 .header-right {
   position: relative;
+  margin-right: 10px;
 }
 
 .header-right .logo-menu {
