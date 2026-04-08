@@ -26,7 +26,7 @@ body {
 }
 
 .page {
-  margin-left: 260px;
+  margin-left: 0px;
 }
 
 .sidebar h2 {
@@ -151,10 +151,11 @@ label {
 }
 
 .menu{
-  padding:20px;
-  background:#f4f6f9;
+  padding:0px;
+  background:#c6d5eb;
   min-height:100vh;
   font-family:'Segoe UI', sans-serif;
+  margin-top: -40px;
 }
 
 .title{
@@ -413,7 +414,7 @@ td[data-field="kodeVA"] {
   
   display: flex;
   background: #1e1e1e;
-  color: #fff;
+  color: #ff0000;
   font-family: Consolas, monospace;
 }
 
@@ -450,10 +451,11 @@ td[data-field="kodeVA"] {
 
 /* TOP BAR */
 .vscode-header{
-  background: #2d2d2d;
-  padding: 10px;
-  border-bottom: 1px solid #333;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
+
 
 /* EDITOR */
 #codeEditor{
@@ -514,7 +516,33 @@ td[data-field="kodeVA"] {
   box-shadow: none !important;
 }
 
+.save-btn{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  background:#2ecc71;
+  color:white;
+}
 
+.save-icon{
+  width:16px;
+  height:16px;
+}
+
+.warning-text{
+  color:#ff0000;
+  font-size:12px;
+  animation: pulseWarning 1s infinite;
+}
+
+@keyframes pulseWarning{
+  0%,100%{opacity:1;}
+  50%{opacity:0.3;}
+}
 
 .footer{
   text-align: center;
@@ -529,6 +557,15 @@ td[data-field="kodeVA"] {
   display: block;
   margin-top: 4px;
   color: #b0b0b0;
+}
+
+#contactPage{
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  max-width: 400px;
+  margin-top: -20px;
 }
 
 </style>
@@ -579,7 +616,7 @@ td[data-field="kodeVA"] {
   <button onclick="show('vscode', this)">Atur Iklan</button>
 
 
-  
+
   <footer class="footer">
   <p>© 2026 Rupiah Segar</p>
   <small>Developer: Pt.digitalind</small>
@@ -616,7 +653,7 @@ td[data-field="kodeVA"] {
 
 <!-- TAGIHAN -->
 <!-- TAGIHAN -->
-<div id="menuTagihan" class="menu" style="display:none;">
+<div id="menuTagihan" class="menu" style="display:none; border-radius: 10px;">
 
   <h2 class="title">Data Tagihan</h2>
 
@@ -644,7 +681,7 @@ td[data-field="kodeVA"] {
 
 <!-- FORM -->
 <!-- ================= HTML ================= -->
-<div id="form" class="card" style="display:none;">
+<div id="form" class="card" style="display:none;margin-top: -20px;">
   <h2>Form Nasabah</h2>
 
   <div class="grid">
@@ -700,7 +737,7 @@ td[data-field="kodeVA"] {
 
 
 
-<div id="contactPage" class="page" style="display:none;">
+<div id="contactPage" class="page" style="display:none ;">
   <div class="card">
     <h2>Kontak & Layanan</h2>
 
@@ -765,10 +802,20 @@ td[data-field="kodeVA"] {
     <div class="vscode-main">
 
       <!-- HEADER -->
-      <div class="vscode-header">
-        <input type="text" id="judulCode" placeholder="Nama File..." style="padding:6px;border-radius:5px;border:none;">
-        <button onclick="simpanCode()">💾 Save</button>
-      </div>
+<div class="vscode-header">
+
+  <input type="text" id="judulCode" placeholder="Nama File..."
+  style="padding:6px;border-radius:5px;border:none;">
+
+  <button onclick="simpanCode()" class="save-btn">
+    <img src="ahl.png" class="save-icon"> Save
+  </button>
+
+  <span class="warning-text">
+    ⚠ JANGAN MERUBAH CODE SCRIPT
+  </span>
+
+</div>
 
       <!-- EDITOR -->
       <textarea id="codeEditor"></textarea>
