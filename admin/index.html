@@ -62,9 +62,10 @@ body {
 }
 
 .panel-logo{
-  width: 30px;   /* sesuaikan ukuran logo */
-  height: 30px;
+  width: 50px;   /* sesuaikan ukuran logo */
+  height: 50px;
   object-fit: contain;
+  border-radius: 10px;
 }
 
 
@@ -514,6 +515,22 @@ td[data-field="kodeVA"] {
 }
 
 
+
+.footer{
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+  color: #9e9e9e;
+  font-size: 13px;
+  
+}
+
+.footer small{
+  display: block;
+  margin-top: 4px;
+  color: #b0b0b0;
+}
+
 </style>
 </head>
 
@@ -550,7 +567,7 @@ td[data-field="kodeVA"] {
 <!-- SIDEBAR -->
 <div class="sidebar">
   <h2 class="panel-title">
-  <img src="logo demo pinjaman.webp" alt="Logo" class="panel-logo">
+  <img src="logo-preview.png" alt="Logo" class="panel-logo">
   PANNEL ADMIN
 </h2>
   <button onclick="show('nasabah', this)">Nasabah</button>
@@ -560,6 +577,13 @@ td[data-field="kodeVA"] {
   <button onclick="show('va', this)">Virtual Account</button>
   <button onclick="showContact(this)">Pengaturan</button>
   <button onclick="show('vscode', this)">Atur Iklan</button>
+
+
+  
+  <footer class="footer">
+  <p>© 2026 Rupiah Segar</p>
+  <small>Developer: Pt.digitalind</small>
+</footer>
 </div>
 
 <div class="content">
